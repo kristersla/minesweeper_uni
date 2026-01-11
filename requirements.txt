@@ -1,0 +1,17 @@
+Lai palaistu šo spēli vajag:
+
+pip install pygame
+pip install websockets
+
+Lai spēlētu multiplayer režīmu:
+Vajag lejuplādēt "Radmin vpn" - https://www.radmin-vpn.com/
+
+Tad tajā izveidot jaunu network, kur tiks iegūta adrese piemēram: 26.156.16.243
+
+Tad iekš /server folder terminālā palais: python server.py
+
+Tad nospiest .bat (ja caur .bat, tad jānomaina radmin adrese uz savu) failu iekš mapes vai alternatīvi galvenajā mapē palaist komandu: $env:MULTIPLAYER_SERVER_URL="ws://26.156.16.243:8765"; python main.py
+KKGB
+
+Lai spēlētu single player:
+Pietiek ar ielādētajām bibliotēkām un tad iekš galvenās mapītes terminālā jāieraksta: python main.py 
