@@ -655,8 +655,6 @@ class Resolution(Menu):
                     print(data2['width'])
 
 
-          
-
         self.run_display = True
         while self.run_display:
             self.start_screen.check_events()
@@ -666,7 +664,6 @@ class Resolution(Menu):
             self.start_screen.draw_text('Current resolution - ' + data2['width']+ ' x ' + data2['width'], 20, self.start_screen.DISPLAY_W / 2, self.start_screen.DISPLAY_H / 2 - 40)
             self.start_screen.draw_text("Width", 35, self.predx, self.predy)
             # self.start_screen.draw_text("Height", 35, self.codx, self.cody)
-
 
             self.draw_cursor()
             self.blit_screen()
@@ -817,7 +814,7 @@ class MultiplayerMenu(Menu):
                 "Multiplayer", 50, self.start_screen.DISPLAY_W / 2, self.start_screen.DISPLAY_H / 2 - 120
             )
             self.start_screen.draw_text(
-                f"Set Name {self.start_screen.player_name or 'None'}", 30, self.namex, self.namey
+                f"Set Name", 30, self.namex, self.namey
             )
             self.start_screen.draw_text("Create Room", 30, self.createx, self.createy)
             self.start_screen.draw_text("Join Room", 30, self.joinx, self.joiny)
@@ -1082,12 +1079,6 @@ class LobbySettingsMenu(Menu):
         self.background = pygame.transform.scale(
             self.background, (self.start_screen.DISPLAY_W, self.start_screen.DISPLAY_H)
         )
-        self.presets = [
-            {"name": "Beginner", "rows": 9, "probability": 0.12},
-            {"name": "Easy", "rows": 12, "probability": 0.14},
-            {"name": "Medium", "rows": 16, "probability": 0.16},
-            {"name": "Hard", "rows": 20, "probability": 0.18},
-        ]
 
     def display_menu(self):
         self.run_display = True
@@ -1102,7 +1093,6 @@ class LobbySettingsMenu(Menu):
         probability = str(settings.get("probability", 0.15))
         width = str(settings.get("width", self.start_screen.DISPLAY_W))
         field = "rows"
-        preset_index = None
         while self.run_display:
             self.start_screen.poll_network()
             self.start_screen.display.blit(self.background, (0, 0))
@@ -1118,15 +1108,6 @@ class LobbySettingsMenu(Menu):
                 self.start_screen.DISPLAY_W / 2,
                 self.start_screen.DISPLAY_H / 2 - 80,
             )
-            
-            if preset_index is not None:
-                self.start_screen.draw_text(
-                    f"Selected preset: {self.presets[preset_index]['name']}",
-                    18,
-                    self.start_screen.DISPLAY_W / 2,
-                    self.start_screen.DISPLAY_H / 2 - 25,
-                )
-
             font = pygame.font.Font("fonts/Jolana.ttf", 26)
             tiles_label = f"'{rows}'" if field == "rows" else rows
             prob_label = f"'{probability}'" if field == "probability" else probability
@@ -1142,13 +1123,6 @@ class LobbySettingsMenu(Menu):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_TAB:
                         field = "probability" if field == "rows" else "width" if field == "probability" else "rows"
-                    elif event.key in (pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4):
-                        preset_index = event.key - pygame.K_1
-                        preset = self.presets[preset_index]
-                        rows = str(preset["rows"])
-                        probability = str(preset["probability"])
-                        width = str(self.start_screen.DISPLAY_W)
-                        field = "rows"
                     elif event.key == pygame.K_BACKSPACE:
                         if field == "rows":
                             rows = rows[:-1]
