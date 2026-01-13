@@ -13,6 +13,10 @@ def generate_code(length=5):
     return "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 
+def generate_room_code(length=5):
+    return "".join(random.choice(string.ascii_uppercase) for _ in range(length))
+
+
 @dataclass
 class Player:
     id: str
@@ -66,7 +70,7 @@ async def handle_message(websocket, message):
     if message_type == "create_room":
         player_id = payload.get("player_id") or generate_code(8)
         name = payload.get("name", "Player")
-        code = generate_code()
+        code = generate_room_code()
         room = Room(code=code, host_id=player_id)
         player = Player(id=player_id, name=name, websocket=websocket)
         room.players[player_id] = player
