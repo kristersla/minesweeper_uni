@@ -864,7 +864,12 @@ class MultiplayerMenu(Menu):
                 if not self.start_screen.player_name:
                     self.start_screen.curr_menu = self.start_screen.name_menu
                 else:
-                    self.start_screen.curr_menu = self.start_screen.room_menu
+                    client = self.start_screen.ensure_network()
+                    client.send(
+                        "create_room",
+                        {"name": self.start_screen.player_name},
+                    )
+                    self.start_screen.curr_menu = self.start_screen.lobby_menu
             elif self.state == "Join Room":
                 self.start_screen.next_multiplayer_action = "join"
                 if not self.start_screen.player_name:
@@ -917,6 +922,9 @@ class NameEntryMenu(Menu):
                         self.run_display = False
                     elif event.unicode.isprintable():
                         input_text += event.unicode
+
+                    with open('jsons/player_name.json', 'w') as f:
+                        json.dump({'name': self.start_screen.player_name}, f)
 
             self.blit_screen()
 
