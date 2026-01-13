@@ -56,6 +56,7 @@ class Game:
             self.clock.tick(self.settings.fps)
             self.poll_network()
             self.events()
+            self.update_win_state()
             self.draw()
             if self.multiplayer and self.state == "waiting":
                 continue
@@ -164,23 +165,34 @@ class Game:
                         if self.multiplayer:
                             self.send_flag_update()
 
-            if self.check_win():
-                if not self.win:
-                    self.win_time = pygame.time.get_ticks()
-                    self.win = True
-                    for row in self.board.board_list:
-                        for tile in row:
-                            if not tile.revealed:
-                                tile.flagged = True
-                    self.win_sound.play()
+    def update_win_state(self):
+        if self.state == "waiting":
+            return
+        if not self.check_win():
+            return
+        if not self.win:
+            self.win_time = pygame.time.get_ticks()
+            self.win = True
+            for row in self.board.board_list:
+                for tile in row:
+                    if not tile.revealed:
+                        tile.flagged = True
+            if self.multiplayer:
+                self.play_music(
+                    "music/winsound.mp3",
+                    loops=0,
+                    on_end="music/waiting_players.mp3",
+                )
+            else:
+                self.win_sound.play()
 
-                if self.win_time + 10 < pygame.time.get_ticks():
-                    if self.multiplayer:
-                        self.handle_multiplayer_end("finished")
-                    else:
-                        self.playing = False
-                        self.you_won()
-                        self.win_screen()
+        if self.win_time + 10 < pygame.time.get_ticks():
+            if self.multiplayer:
+                self.handle_multiplayer_end("finished")
+            else:
+                self.playing = False
+                self.you_won()
+                self.win_screen()
 
     def lose_screen(self):
         if self.multiplayer:
@@ -384,7 +396,8 @@ class Game:
             )
             self.waiting_message = "You died! Waiting for others..."
         else:
-            self.play_music("music/waiting_players.mp3")
+            if self.current_track != "music/winsound.mp3":
+                self.play_music("music/waiting_players.mp3")
             self.waiting_message = "You finished! Waiting for others..."
 
     def play_music(self, track, loops=-1, on_end=None):

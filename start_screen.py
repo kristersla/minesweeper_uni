@@ -181,4 +181,5 @@ class Start_Screen():
         game.run()
         self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
         self.curr_menu = self.lobby_menu
+        self.current_track = None
         self.play_music("music/menu.mp3")
