@@ -27,6 +27,8 @@ class Game:
         self.win = False
         pygame.mixer.init()
         self.current_track = None
+        self.pending_track = None
+        self.music_end_event = pygame.USEREVENT + 1
 
         self.explosion_sound = pygame.mixer.Sound("music/losegame.mp3")
         self.win_sound = pygame.mixer.Sound("music/winsound.mp3")
@@ -114,6 +116,9 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit(0)
+            if event.type == self.music_end_event:
+                self.handle_music_end()
+                continue
 
             if self.state == "waiting":
                 continue
@@ -372,17 +377,33 @@ class Game:
             },
         )
         if status == "dead":
-            self.play_music("music/losegame.mp3")
+            self.play_music(
+                "music/losegame.mp3",
+                loops=0,
+                on_end="music/waiting_players.mp3",
+            )
             self.waiting_message = "You died! Waiting for others..."
         else:
+            self.play_music("music/waiting_players.mp3")
             self.waiting_message = "You finished! Waiting for others..."
 
-    def play_music(self, track):
+    def play_music(self, track, loops=-1, on_end=None):
         if self.current_track == track:
             return
         pygame.mixer.music.load(track)
-        pygame.mixer.music.play(-1)
+        pygame.mixer.music.play(loops)
         self.current_track = track
+        self.pending_track = on_end
+        pygame.mixer.music.set_endevent(
+            self.music_end_event if on_end is not None else 0
+        )
+
+    def handle_music_end(self):
+        if not self.pending_track:
+            return
+        next_track = self.pending_track
+        self.pending_track = None
+        self.play_music(next_track)
 
     def draw_sidebar(self):
         sidebar_rect = pygame.Rect(
