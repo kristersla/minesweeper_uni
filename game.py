@@ -142,12 +142,15 @@ class Game:
                                         tile.image = self.settings.tile_not_mine
                                     elif tile.type == "X":
                                         tile.revealed = True
-                            self.explosion_sound.play()
                             print("lost")
                             if self.multiplayer:
                                 self.handle_multiplayer_end("dead")
                             else:
-                                self.play_music("music/losegame.mp3")
+                                self.play_music(
+                                    "music/losegame.mp3",
+                                    loops=0,
+                                    on_end="music/waiting_players.mp3",
+                                )
                                 self.playing = False
                         else:
                             pygame.mixer.Sound("music/flags.mp3").play()
@@ -184,6 +187,8 @@ class Game:
                     on_end="music/waiting_players.mp3",
                 )
             else:
+                pygame.mixer.music.stop()
+                self.current_track = None
                 self.win_sound.play()
 
         if self.win_time + 10 < pygame.time.get_ticks():
