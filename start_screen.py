@@ -64,7 +64,7 @@ class Start_Screen():
             "start_time": None,
             "leaderboard": [],
         }
-        self.player_name = ""
+        self.player_name = self.load_player_name()
         self.next_multiplayer_action = None
         self.play_music("music/menu.mp3")
 
@@ -128,6 +128,14 @@ class Start_Screen():
             with open(path, "r") as file_handle:
                 return json.load(file_handle)
         return {"width": 720}
+
+    def load_player_name(self):
+        path = "jsons/player_name.json"
+        if os.path.exists(path):
+            with open(path, "r") as file_handle:
+                data = json.load(file_handle)
+            return str(data.get("name", "")).strip()
+        return ""
 
     def ensure_network(self):
         if self.network_client is None:

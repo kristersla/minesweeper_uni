@@ -918,14 +918,14 @@ class NameEntryMenu(Menu):
                         input_text = input_text[:-1]
                     elif event.key == pygame.K_RETURN:
                         self.start_screen.player_name = input_text.strip() or "Player"
+                        with open("jsons/player_name.json", "w") as file_handle:
+                            json.dump({"name": self.start_screen.player_name}, file_handle)
                         self.start_screen.curr_menu = self.start_screen.multiplayer_menu
                         self.run_display = False
                     elif event.unicode.isprintable():
                         input_text += event.unicode
-
-                    with open('jsons/player_name.json', 'w') as f:
-                        json.dump({'name': self.start_screen.player_name}, f)
-
+                    self.start_screen.player_name = input_text.strip()
+            
             self.blit_screen()
 
 
