@@ -8,7 +8,7 @@ import math
 import os
 from settings import Settings, MULTIPLAYER_SIDEBAR_WIDTH
 
-os.environ["SDL_VIDEO_CENTERED"] = "1"  # Center the window
+os.environ["SDL_VIDEO_CENTERED"] = "1"
 
 class Menu():
     def __init__(self, start_screen):
@@ -61,7 +61,6 @@ class MainMenu(Menu):
             self.draw_cursor()
             self.blit_screen()
 
-            # Update title_size to zoom the Minesweeper text
             self.title_size = 80 + 10 * abs(math.sin(pygame.time.get_ticks() / 400))
 
 
@@ -620,24 +619,6 @@ class Prob(Menu):
                             print('error')
             self.blit_screen()
 
-# class CustomPlay(Menu):
-
-#     def __init__(self, start_screen):
-#         Menu.__init__(self, start_screen)
-#         self.background = pygame.image.load('images/background3.png').convert()
-#         self.background = pygame.transform.scale(self.background, (self.start_screen.DISPLAY_W, self.start_screen.DISPLAY_H))
-
-
-#     def display_menu(self):
-
-        
-#         subprocess.Popen(['python', 'game.py'])
-#         pygame.quit()
-#         # from game import Game  
-#         # game = Game()
-#         # game.new()
-#         # game.run()
-
 class Resolution(Menu):
     def __init__(self, start_screen):
         Menu.__init__(self, start_screen)
@@ -963,12 +944,6 @@ class RoomMenu(Menu):
                     40,
                     self.start_screen.DISPLAY_W / 2,
                     self.start_screen.DISPLAY_H / 2 - 80,
-                )
-                self.start_screen.draw_text(
-                    "Press Enter to create",
-                    24,
-                    self.start_screen.DISPLAY_W / 2,
-                    self.start_screen.DISPLAY_H / 2 - 20,
                 )
             font = pygame.font.Font("fonts/Jolana.ttf", 30)
             input_surface = font.render(input_text, True, self.start_screen.WHITE)

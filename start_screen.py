@@ -5,9 +5,7 @@ import pygame
 
 from menu import *
 from networking import NetworkClient
-from settings import Settings
-# from game import Game               
-# from board import Board             
+from settings import Settings            
 
 
 class Start_Screen():

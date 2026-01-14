@@ -22,7 +22,6 @@ else:
 screen = pygame.display.set_mode((int(data2['width']), int(data2['width'])))
 background_image = pygame.image.load('images/background3.png').convert()
 
-# Scale the background image to the size of the display screen
 background_image = pygame.transform.scale(background_image, screen.get_size())
 
 screen.blit(background_image, [0, 0])
@@ -33,9 +32,6 @@ text_rect = text_surface.get_rect(center=screen.get_rect().center)
 screen.blit(text_surface, text_rect)
 
 pygame.display.flip()
-
-# Start test.py as a separate process
-subprocess.Popen(['python', 'music.py'])
 
 s = Start_Screen()
 while s.running:
